@@ -1,0 +1,24 @@
+{
+   "name": "ApiAmbiental",
+   "version": "0.0.1",
+   "description": "Awesome project developed with TypeORM.",
+   "devDependencies": {
+      "ts-node": "3.3.0",
+      "@types/node": "^8.0.29",
+      "typescript": "2.5.2"
+   },
+   "dependencies": {
+      "body-parser": "^1.19.0",
+      "cors": "^2.8.5",
+      "express": "^4.16.4",
+      "morgan": "^1.9.1",
+      "multer": "^1.4.1",
+      "mysql": "^2.14.1",
+      "reflect-metadata": "^0.1.10",
+      "routing-controllers": "^0.7.7",
+      "typeorm": "0.2.7"
+   },
+   "scripts": {
+      "start": "ts-node src/index.ts"
+   }
+}
