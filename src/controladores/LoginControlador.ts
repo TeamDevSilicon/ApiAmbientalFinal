@@ -46,9 +46,9 @@ export class LoginControlador {
     }
 
 
-    @Get("/login")
-    getAll() {
-        return this.adminRepositorio.find();
-    }
+    // @Get("/login")
+    // getAll() {
+    //     return this.adminRepositorio.find();
+    // }
 
 }

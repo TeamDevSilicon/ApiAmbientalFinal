@@ -15,7 +15,7 @@ export class Institucion {
     @Column()
     private descripcion: string;
 
-    @Column()
+    @Column({ unique: true })
     private cue: string;
 
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.institucion)
