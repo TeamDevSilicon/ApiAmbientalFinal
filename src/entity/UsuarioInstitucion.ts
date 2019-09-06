@@ -8,7 +8,7 @@ export class UsuarioInstitucion extends Usuario {
     @OneToOne(type => Institucion, {
         cascade: true,
     })
-    @JoinColumn({ name: "id_Institucion" })
+    @JoinColumn({ name: "id_institucion" })
     institucion: Institucion;
 
 }

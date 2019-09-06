@@ -8,7 +8,6 @@ import { TipoDatoAmbiental } from "../entity/TipoDatoAmbiental";
 export class DatoAmbientalControlador {
 
     private datoRepositorio = getRepository(DatoAmbiental);
-    private tipoRepositorio = getRepository(TipoDatoAmbiental);
 
     @Get("/datoAmbiental")
     getAll() {
@@ -47,7 +46,7 @@ export class DatoAmbientalControlador {
     }
 
     @Post("/datoAmbiental")
-    post(@Body() datoAmbiental: any) {
+    post(@Body() datoAmbiental: DatoAmbiental) {
 
         // let fecha = new Date();
         // let fullName: string = JSON.stringify(datoAmbiental);
@@ -91,7 +90,7 @@ export class DatoAmbientalControlador {
                 take: 7
             }));
         }
-        console.log(retorno);
+        //console.log(retorno);
         return retorno;;
     }
 
@@ -112,7 +111,7 @@ export class DatoAmbientalControlador {
                 take: 1
             }));
         }
-        console.log(retorno);
+        //console.log(retorno);
         return retorno;;
     }
 }

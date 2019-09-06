@@ -1,4 +1,4 @@
-import { Entity, Generated, PrimaryGeneratedColumn, OneToMany, ManyToOne, Column } from "typeorm";
+import { Entity, Generated, PrimaryGeneratedColumn, OneToMany, ManyToOne, Column, AfterInsert, BeforeInsert } from "typeorm";
 // import { ValorDatoAmbiental } from "./ValorDatoAmbiental";
 import { Prototipo } from "./Prototipo";
 import { Sensor } from "./Sensor";
@@ -14,15 +14,21 @@ export class DatoAmbiental {
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     private fecha: Date;
-
-    @Column({ default: DateUtils.mixedDateToDateString(new Date()) })
-    private fechaCreacion: String;
+    /* { default: DateUtils.mixedDateToDateString(new Date()) } */
+    @Column()
+    fechaCreacion: String;
 
     @Column()
     private valor: number;
 
     @Column()
     private ubicacion: string;
+
+    @BeforeInsert()
+    setearFecha() {
+        console.log('Before');
+        this.fechaCreacion = DateUtils.mixedDateToDateString(new Date());
+    }
 
     // @OneToMany(type => ValorDatoAmbiental, valorAmbiental => valorAmbiental.datoAmbiental)
     // valores: ValorDatoAmbiental[];
