@@ -5,15 +5,15 @@ import { DatoAmbiental } from "./DatoAmbiental";
 @Entity()
 export class Institucion {
 
-    public constructor(descripcion: string) {
-        this.descripcion = descripcion;
+    public constructor(nombre: string) {
+        this.nombre = nombre;
     }
 
     @PrimaryGeneratedColumn({ name: "id_institucion" })
     private id: number;
 
     @Column()
-    private descripcion: string;
+    private nombre: string;
 
     @Column({ unique: true })
     private cue: string;
@@ -21,6 +21,11 @@ export class Institucion {
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.institucion)
     private datosAmbientales: DatoAmbiental[];
 
+    @Column()
+    longitud: string;
+
+    @Column()
+    latitud: string;
 
     /**
      * Getter $id
@@ -31,11 +36,11 @@ export class Institucion {
     }
 
     /**
-     * Getter $descripcion
+     * Getter $nombre
      * @return {string}
      */
-    public get $descripcion(): string {
-        return this.descripcion;
+    public get $nombre(): string {
+        return this.nombre;
     }
 
     /**
@@ -63,11 +68,11 @@ export class Institucion {
     }
 
     /**
-     * Setter $descripcion
+     * Setter $nombre
      * @param {string} value
      */
-    public set $descripcion(value: string) {
-        this.descripcion = value;
+    public set $nombre(value: string) {
+        this.nombre = value;
     }
 
     /**
