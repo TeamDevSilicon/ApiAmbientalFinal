@@ -34,7 +34,7 @@ export class DatoAmbiental {
     // valores: ValorDatoAmbiental[];
 
     @ManyToOne(type => Prototipo, prototipo => prototipo.datosAmbientales, { cascade: true })
-    private prototipo: Prototipo;
+    prototipo: Prototipo;
 
     @ManyToOne(type => Sensor, sensor => sensor.datosAmbientales, { cascade: true })
     private sensor: Sensor;
@@ -111,13 +111,13 @@ export class DatoAmbiental {
     }
 
 
-    /**
-     * Getter $prototipo
-     * @return {Prototipo}
-     */
-    public get $prototipo(): Prototipo {
-        return this.prototipo;
-    }
+    // /**
+    //  * Getter $prototipo
+    //  * @return {Prototipo}
+    //  */
+    // public get $prototipo(): Prototipo {
+    //     return this.prototipo;
+    // }
 
     /**
      * Getter $sensor
@@ -143,13 +143,13 @@ export class DatoAmbiental {
         return this.institucion;
     }
 
-    /**
-     * Setter $prototipo
-     * @param {Prototipo} value
-     */
-    public set $prototipo(value: Prototipo) {
-        this.prototipo = value;
-    }
+    // /**
+    //  * Setter $prototipo
+    //  * @param {Prototipo} value
+    //  */
+    // public set $prototipo(value: Prototipo) {
+    //     this.prototipo = value;
+    // }
 
     /**
      * Setter $sensor

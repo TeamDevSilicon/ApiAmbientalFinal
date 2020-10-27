@@ -14,7 +14,7 @@ export class Prototipo {
     @Column()
     private nombre: string;
 
-    @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.$prototipo)
+    @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.prototipo)
     datosAmbientales: DatoAmbiental[];
 
 }
