@@ -2,6 +2,8 @@ import { JsonController, Get, Post, Param, Body, Put, Delete } from "routing-con
 import { getRepository } from "typeorm";
 import { DatoAmbiental } from "../entity/DatoAmbiental";
 import { TipoDatoAmbiental } from "../entity/TipoDatoAmbiental";
+import { Dato } from "../Solucion/Dato";
+import { InstitucionDato } from "../Solucion/InstitucionDato";
 
 
 @JsonController()
@@ -112,6 +114,137 @@ export class DatoAmbientalControlador {
             }));
         }
         //console.log(retorno);
-        return retorno;;
+        return retorno;
     }
+
+    @Get("/datoAmbientalPrototipo/:prototipoId")
+    // @OnUndefined(institucionNotFoundError)
+    async devolverDatosPorPrototipo(@Param("prototipoId") id: number) {
+        console.log('Id ' + id.toString.length)
+        let retorno: Array<DatoAmbiental[]> = [];
+        for (let index = 1; index < 8; index++) {
+            retorno.push(await this.datoRepositorio.find({
+                relations: ['tipoDato'], order: { id: "DESC" },
+                where: {
+                    tipoDato: index,
+                    prototipo: id
+                },
+                skip: 0,
+                take: 1
+            }));
+        }
+
+        let inst = new InstitucionDato();
+        // let fecha = retorno.find(value => value.forEach(element => {
+        //     return element.$fecha;
+        // }));
+        // let datoAmbientales = retorno.find();
+        // let fecha = datoAmbientales.find(value => value.$fecha);
+        //console.log("Fecha " + fecha);
+        let lista: Array<Dato> = [];
+        let datoObject = new Dato();
+
+        retorno.forEach(value => {
+            value.forEach(dato => {
+                console.log(dato.tipoDato);
+                if (dato.tipoDato.id == 1) {
+                    datoObject.temperaturaAmbiente = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 2) {
+                    datoObject.humedadAmbiente = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 3) {
+                    datoObject.humedadSuelo = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 4) {
+                    datoObject.luz = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 5) {
+                    datoObject.lluvia = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 6) {
+                    datoObject.viento = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 7) {
+                    datoObject.precipitaciones = dato.$valor;
+                }
+            })
+        });
+        lista.push(datoObject);
+        console.log(lista.length)
+        inst.datosAmbientales = lista;
+        return inst;
+    }
+
+    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    // @OnUndefined(institucionNotFoundError)
+    async devolverDatosPorPrototipoYFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: string,) {
+        console.log('Id ' + id.toString.length)
+
+        let retorno: Array<DatoAmbiental[]> = [];
+        for (let index = 1; index < 8; index++) {
+            retorno.push(await this.datoRepositorio.find({
+                relations: ['tipoDato'], order: { id: "DESC" },
+                where: {
+                    tipoDato: index,
+                    fechaCreacion: fecha,
+                    prototipo: id
+                },
+                skip: 0,
+                take: 1
+            }));
+        }
+
+        let inst = new InstitucionDato();
+        inst.fecha = new Date;
+        let lista: Array<Dato> = [];
+        let datoObject = new Dato();
+        retorno.forEach(value => {
+            value.forEach(dato => {
+
+                console.log(dato.tipoDato);
+                if (dato.tipoDato.id == 1) {
+                    datoObject.temperaturaAmbiente = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 2) {
+                    datoObject.humedadAmbiente = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 3) {
+                    datoObject.humedadSuelo = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 4) {
+                    datoObject.luz = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 5) {
+                    datoObject.lluvia = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 6) {
+                    datoObject.viento = dato.$valor;
+
+                }
+                if (dato.tipoDato.id == 7) {
+                    datoObject.precipitaciones = dato.$valor;
+
+                }
+            })
+
+
+        });
+        lista.push(datoObject);
+        console.log(lista.length)
+        inst.datosAmbientales = lista;
+        return inst;
+    }
+
 }

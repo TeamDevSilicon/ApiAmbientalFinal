@@ -28,7 +28,7 @@ export class CrearDatos {
             datoAmbiental.$ubicacion = "32123123123- 123321312"
             datoAmbiental.$valor = index + 100 + index;
             datoAmbiental.$institucion = await this.institucionRepositorio.findOne(1);
-            datoAmbiental.$prototipo = await this.prototipoRepositorio.findOne(1);
+            datoAmbiental.prototipo = await this.prototipoRepositorio.findOne(1);
             datoAmbiental.$sensor = await this.sensorRepositorio.findOne(1);
             datoAmbiental.$tipoDato = await this.tipoRepositorio.findOne(index);
             console.log(datoAmbiental);

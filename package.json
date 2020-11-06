@@ -3,8 +3,9 @@
    "version": "0.0.1",
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
-      "ts-node": "3.3.0",
       "@types/node": "^8.0.29",
+      "ts-node": "3.3.0",
+      "typeorm-uml": "^1.2.1",
       "typescript": "2.5.2"
    },
    "dependencies": {
@@ -16,9 +17,10 @@
       "mysql": "^2.14.1",
       "reflect-metadata": "^0.1.10",
       "routing-controllers": "^0.7.7",
-      "typeorm": "0.2.7"
+      "typeorm": "^0.2.28"
    },
    "scripts": {
-      "start": "ts-node src/index.ts"
+      "start": "ts-node src/index.ts",
+      "db:diagram": "ts-node ./node_modules/.bin/typeorm-uml ormconfig.json"
    }
 }

@@ -19,7 +19,7 @@ export class Institucion {
     private cue: string;
 
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.institucion)
-    private datosAmbientales: DatoAmbiental[];
+    datosAmbientales: DatoAmbiental[];
 
     @Column()
     longitud: string;
@@ -51,13 +51,13 @@ export class Institucion {
         return this.cue;
     }
 
-    /**
-     * Getter $datosAmbientales
-     * @return {DatoAmbiental[]}
-     */
-    public get $datosAmbientales(): DatoAmbiental[] {
-        return this.datosAmbientales;
-    }
+    // /**
+    //  * Getter $datosAmbientales
+    //  * @return {DatoAmbiental[]}
+    //  */
+    // public get $datosAmbientales(): DatoAmbiental[] {
+    //     return this.datosAmbientales;
+    // }
 
     /**
      * Setter $id
@@ -83,13 +83,13 @@ export class Institucion {
         this.cue = value;
     }
 
-    /**
-     * Setter $datosAmbientales
-     * @param {DatoAmbiental[]} value
-     */
-    public set $datosAmbientales(value: DatoAmbiental[]) {
-        this.datosAmbientales = value;
-    }
+    // /**
+    //  * Setter $datosAmbientales
+    //  * @param {DatoAmbiental[]} value
+    //  */
+    // public set $datosAmbientales(value: DatoAmbiental[]) {
+    //     this.datosAmbientales = value;
+    // }
 
 
 

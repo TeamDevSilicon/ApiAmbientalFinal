@@ -16,7 +16,9 @@ export class InstitucionControlador {
     // @OnUndefined(institucionNotFoundError)
     getOne(@Param("id") id: number) {
         console.log('Id ' + id.toString.length)
-        return this.institucionRepositorio.findOne(id);
+        return this.institucionRepositorio.findOne(id, {
+            relations: ['datosAmbientales', 'datosAmbientales.tipoDato']
+        });
     }
 
     @Post("/institucion")
@@ -34,5 +36,6 @@ export class InstitucionControlador {
         let datoARemover = await this.institucionRepositorio.findOne(id);
         return this.institucionRepositorio.remove(datoARemover);
     }
+
 
 }

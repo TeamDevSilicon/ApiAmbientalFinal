@@ -39,10 +39,10 @@ export class DatoAmbiental {
     @ManyToOne(type => Sensor, sensor => sensor.datosAmbientales, { cascade: true })
     private sensor: Sensor;
 
-    @ManyToOne(type => TipoDatoAmbiental, tipoDatoAmbiental => tipoDatoAmbiental.$datosAmbientales, { cascade: true })
-    private tipoDato: TipoDatoAmbiental;
+    @ManyToOne(type => TipoDatoAmbiental, tipoDatoAmbiental => tipoDatoAmbiental.datosAmbientales, { cascade: true })
+    tipoDato: TipoDatoAmbiental;
 
-    @ManyToOne(type => Institucion, institucion => institucion.$datosAmbientales, { cascade: true })
+    @ManyToOne(type => Institucion, institucion => institucion.datosAmbientales, { cascade: true })
     institucion: Institucion;
 
 
@@ -127,13 +127,13 @@ export class DatoAmbiental {
         return this.sensor;
     }
 
-    /**
-     * Getter $tipoDato
-     * @return {TipoDatoAmbiental}
-     */
-    public get $tipoDato(): TipoDatoAmbiental {
-        return this.tipoDato;
-    }
+    // /**
+    //  * Getter $tipoDato
+    //  * @return {TipoDatoAmbiental}
+    //  */
+    // public get $tipoDato(): TipoDatoAmbiental {
+    //     return this.tipoDato;
+    // }
 
     /**
      * Getter $institucion
@@ -159,13 +159,13 @@ export class DatoAmbiental {
         this.sensor = value;
     }
 
-    /**
-     * Setter $tipoDato
-     * @param {TipoDatoAmbiental} value
-     */
-    public set $tipoDato(value: TipoDatoAmbiental) {
-        this.tipoDato = value;
-    }
+    // /**
+    //  * Setter $tipoDato
+    //  * @param {TipoDatoAmbiental} value
+    //  */
+    // public set $tipoDato(value: TipoDatoAmbiental) {
+    //     this.tipoDato = value;
+    // }
 
     /**
      * Setter $institucion

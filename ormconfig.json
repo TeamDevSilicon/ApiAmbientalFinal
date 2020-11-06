@@ -2,9 +2,9 @@
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
-   "username": "c0460187",
-   "password": "12FIdodane",
-   "database": "c0460187_ambiente",
+   "username": "root",
+   "password": "root",
+   "database": "ambiente3",
    "synchronize": false,
    "logging": false,
    "entities": [
