@@ -9,10 +9,10 @@ export class Prototipo {
     }
 
     @PrimaryGeneratedColumn({ name: "id_prototipo" })
-    private id: number;
+    id: number;
 
     @Column()
-    private nombre: string;
+    nombre: string;
 
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.prototipo)
     datosAmbientales: DatoAmbiental[];

@@ -1,5 +1,5 @@
 import { JsonController, Get, Post, Param, Body, Put, Delete } from "routing-controllers";
-import { getRepository } from "typeorm";
+import { Between, getRepository } from "typeorm";
 import { DatoAmbiental } from "../entity/DatoAmbiental";
 import { TipoDatoAmbiental } from "../entity/TipoDatoAmbiental";
 import { Dato } from "../Solucion/Dato";
@@ -123,128 +123,93 @@ export class DatoAmbientalControlador {
         console.log('Id ' + id.toString.length)
         let retorno: Array<DatoAmbiental[]> = [];
         for (let index = 1; index < 8; index++) {
-            retorno.push(await this.datoRepositorio.find({
-                relations: ['tipoDato'], order: { id: "DESC" },
+            let dato: DatoAmbiental[] = [];
+            dato = await this.datoRepositorio.find({
+                relations: ['tipoDato',], order: { id: "DESC" },
                 where: {
                     tipoDato: index,
                     prototipo: id
                 },
                 skip: 0,
                 take: 1
-            }));
+            });
+            if (dato.length > 0) {
+                retorno.push(dato);
+            }
         }
 
-        let inst = new InstitucionDato();
-        // let fecha = retorno.find(value => value.forEach(element => {
-        //     return element.$fecha;
-        // }));
-        // let datoAmbientales = retorno.find();
-        // let fecha = datoAmbientales.find(value => value.$fecha);
-        //console.log("Fecha " + fecha);
-        let lista: Array<Dato> = [];
-        let datoObject = new Dato();
+        return retorno;
+        // let inst = new InstitucionDato();
+        // // let fecha = retorno.find(value => value.forEach(element => {
+        // //     return element.$fecha;
+        // // }));
+        // // let datoAmbientales = retorno.find();
+        // // let fecha = datoAmbientales.find(value => value.$fecha);
+        // //console.log("Fecha " + fecha);
+        // let lista: Array<Dato> = [];
+        // let datoObject = new Dato();
 
-        retorno.forEach(value => {
-            value.forEach(dato => {
-                console.log(dato.tipoDato);
-                if (dato.tipoDato.id == 1) {
-                    datoObject.temperaturaAmbiente = dato.$valor;
+        // retorno.forEach(value => {
+        //     value.forEach(dato => {
+        //         console.log(dato.tipoDato);
+        //         if (dato.tipoDato.id == 1) {
+        //             datoObject.temperaturaAmbiente = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 2) {
-                    datoObject.humedadAmbiente = dato.$valor;
+        //         }
+        //         if (dato.tipoDato.id == 2) {
+        //             datoObject.humedadAmbiente = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 3) {
-                    datoObject.humedadSuelo = dato.$valor;
+        //         }
+        //         if (dato.tipoDato.id == 3) {
+        //             datoObject.humedadSuelo = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 4) {
-                    datoObject.luz = dato.$valor;
+        //         }
+        //         if (dato.tipoDato.id == 4) {
+        //             datoObject.luz = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 5) {
-                    datoObject.lluvia = dato.$valor;
+        //         }
+        //         if (dato.tipoDato.id == 5) {
+        //             datoObject.lluvia = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 6) {
-                    datoObject.viento = dato.$valor;
+        //         }
+        //         if (dato.tipoDato.id == 6) {
+        //             datoObject.viento = dato.$valor;
 
-                }
-                if (dato.tipoDato.id == 7) {
-                    datoObject.precipitaciones = dato.$valor;
-                }
-            })
-        });
-        lista.push(datoObject);
-        console.log(lista.length)
-        inst.datosAmbientales = lista;
-        return inst;
+        //         }
+        //         if (dato.tipoDato.id == 7) {
+        //             datoObject.precipitaciones = dato.$valor;
+        //         }
+        //     })
+        // });
+        // lista.push(datoObject);
+        // console.log(lista.length)
+        // inst.datosAmbientales = lista;
+        // return inst;
     }
 
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    @Get("/datoAmbientalPrototipo/:prototipoId/:fechaDesde/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
-    async devolverDatosPorPrototipoYFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: string,) {
+    async devolverDatosPorPrototipoYFecha(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: string, @Param("fechaHasta") fechaHasta: string) {
         console.log('Id ' + id.toString.length)
 
         let retorno: Array<DatoAmbiental[]> = [];
         for (let index = 1; index < 8; index++) {
-            retorno.push(await this.datoRepositorio.find({
+            let dato: DatoAmbiental[] = [];
+            dato = await this.datoRepositorio.find({
                 relations: ['tipoDato'], order: { id: "DESC" },
                 where: {
                     tipoDato: index,
-                    fechaCreacion: fecha,
+                    fecha: Between(fechaDesde, fechaHasta),
                     prototipo: id
                 },
-                skip: 0,
-                take: 1
-            }));
+                skip: 0/* ,
+                take: 1 */
+            });
+            if (dato.length > 0) {
+                retorno.push(dato);
+            }
         }
-
-        let inst = new InstitucionDato();
-        inst.fecha = new Date;
-        let lista: Array<Dato> = [];
-        let datoObject = new Dato();
-        retorno.forEach(value => {
-            value.forEach(dato => {
-
-                console.log(dato.tipoDato);
-                if (dato.tipoDato.id == 1) {
-                    datoObject.temperaturaAmbiente = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 2) {
-                    datoObject.humedadAmbiente = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 3) {
-                    datoObject.humedadSuelo = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 4) {
-                    datoObject.luz = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 5) {
-                    datoObject.lluvia = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 6) {
-                    datoObject.viento = dato.$valor;
-
-                }
-                if (dato.tipoDato.id == 7) {
-                    datoObject.precipitaciones = dato.$valor;
-
-                }
-            })
-
-
-        });
-        lista.push(datoObject);
-        console.log(lista.length)
-        inst.datosAmbientales = lista;
-        return inst;
+        return retorno;
     }
 
 }

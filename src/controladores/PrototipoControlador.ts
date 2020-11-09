@@ -17,7 +17,10 @@ export class PrototipoControlador {
     // @OnUndefined(UserNotFoundError)
     getOne(@Param("id") id: number) {
         console.log('Id ' + id.toString.length)
-        return this.prototipoRepositorio.findOne(id);
+        return this.prototipoRepositorio.findOne(id, {
+            relations: ['datosAmbientales', 'datosAmbientales.tipoDato']
+
+        });
     }
 
     @Post("/prototipo")
