@@ -1,6 +1,7 @@
 import { JsonController, Get, Post, Param, Body, Put, Delete } from "routing-controllers";
 import { Between, getRepository } from "typeorm";
 import { DatoAmbiental } from "../entity/DatoAmbiental";
+import { Prototipo } from "../entity/Prototipo";
 import { TipoDatoAmbiental } from "../entity/TipoDatoAmbiental";
 import { Dato } from "../Solucion/Dato";
 import { InstitucionDato } from "../Solucion/InstitucionDato";
@@ -199,7 +200,7 @@ export class DatoAmbientalControlador {
                 relations: ['tipoDato'], order: { id: "DESC" },
                 where: {
                     tipoDato: index,
-                    fecha: Between(fechaDesde, fechaHasta),
+                    fechaCreacion: Between(fechaDesde, fechaHasta),
                     prototipo: id
                 },
                 skip: 0/* ,
@@ -210,6 +211,24 @@ export class DatoAmbientalControlador {
             }
         }
         return retorno;
+    }
+
+    @Get("/datoAmbientalPrototiposPorInstitucion/:institucionId")
+    // @OnUndefined(institucionNotFoundError)
+    async devolverPrototiposPorInstitucion(@Param("institucionId") id: number) {
+        console.log('Id ' + id.toString.length)
+
+        let dato1 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+            .select("prototipo.id", "id")
+            .addSelect("prototipo.nombre", "nombre")
+            .distinct(true)
+
+            /*         .select() */
+            .innerJoin("datoAmbiental.prototipo", "prototipo")
+            .where("datoAmbiental.institucion = :id", { id: id })
+            .getRawMany();
+        console.log(dato1);
+        return dato1;
     }
 
 }

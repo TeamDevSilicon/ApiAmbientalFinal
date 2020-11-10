@@ -9,16 +9,16 @@ export class InstitucionControlador {
 
     @Get("/institucion")
     getAll() {
-        return this.institucionRepositorio.find({ relations: ['datosAmbientales'] });
+        return this.institucionRepositorio.find({ /* relations: ['datosAmbientales']  */ });
     }
 
     @Get("/institucion/:id")
     // @OnUndefined(institucionNotFoundError)
     getOne(@Param("id") id: number) {
         console.log('Id ' + id.toString.length)
-        return this.institucionRepositorio.findOne(id, {
+        return this.institucionRepositorio.findOne(id/* , {
             relations: ['datosAmbientales', 'datosAmbientales.tipoDato']
-        });
+        } */);
     }
 
     @Post("/institucion")
