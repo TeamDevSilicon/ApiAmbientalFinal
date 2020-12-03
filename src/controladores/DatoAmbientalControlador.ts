@@ -75,7 +75,7 @@ export class DatoAmbientalControlador {
         return this.datoRepositorio.remove(datoARemover);
     }
 
-    //Devuelve una coleccion de colleciones de datos ambientas por tipo de dato y fecha
+    //Devuelve una coleccion de colleciones de datos ambientales por tipo de dato y fecha
     @Get("/datoAmbientalUltimosDatos/:fecha/:idInstitucion")
     // @OnUndefined(datoAmbientalNotFoundError)
     async devolverUltimosDatosAmbientalesPorTipoDato(@Param("fecha") fecha: string, @Param("idInstitucion") idInstitucion: number) {
@@ -118,6 +118,7 @@ export class DatoAmbientalControlador {
         return retorno;
     }
 
+    //Devuelve ultimos datos ambientales por prototipo
     @Get("/datoAmbientalPrototipo/:prototipoId")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipo(@Param("prototipoId") id: number) {
@@ -188,6 +189,7 @@ export class DatoAmbientalControlador {
         // return inst;
     }
 
+    //Devuelve ultimos datos ambientales por prototipo entre 2 fechas
     @Get("/datoAmbientalPrototipo/:prototipoId/:fechaDesde/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoYFecha(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: string, @Param("fechaHasta") fechaHasta: string) {
@@ -213,22 +215,22 @@ export class DatoAmbientalControlador {
         return retorno;
     }
 
+
+    //Devuelve los prototipos de una institucion
     @Get("/datoAmbientalPrototiposPorInstitucion/:institucionId")
     // @OnUndefined(institucionNotFoundError)
     async devolverPrototiposPorInstitucion(@Param("institucionId") id: number) {
         console.log('Id ' + id.toString.length)
 
-        let dato1 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+        let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
             .select("prototipo.id", "id")
             .addSelect("prototipo.nombre", "nombre")
             .distinct(true)
-
-            /*         .select() */
             .innerJoin("datoAmbiental.prototipo", "prototipo")
             .where("datoAmbiental.institucion = :id", { id: id })
             .getRawMany();
-        console.log(dato1);
-        return dato1;
+        console.log(dato);
+        return dato;
     }
 
 }
