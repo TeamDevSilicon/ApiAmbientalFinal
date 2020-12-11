@@ -3,7 +3,7 @@ import { DatoAmbiental } from "../entity/DatoAmbiental";
 
 export class Dato {
 
-
+    fecha: Date;
     temperaturaAmbiente: number;
     humedadAmbiente: number
     humedadSuelo: number

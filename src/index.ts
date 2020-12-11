@@ -8,12 +8,16 @@ import { useExpressServer } from "routing-controllers";
 import { Request, Response } from "express";
 import { Routes } from "./routes";
 import { User } from "./entity/User";
+// import { swaggerUi } from "swagger-ui-express";
+// import { swaggerDocument } from "./swagger";
+
 
 // creates express app, registers all controller routes and returns you express app instance
 let express = require("express"); // or you can import it if you have installed typings
 let app = express();
 app.use(bodyParser.json());
 app.use(logger('dev'));
+//app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // // app.use() // you can configure it the way you want
 useExpressServer(app, {
     cors: true,
