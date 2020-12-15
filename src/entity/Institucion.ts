@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { DatoAmbiental } from "./DatoAmbiental";
+import { PrototipoPorInstitucion } from "./PrototipoPorInstitucion";
 
 
 @Entity()
@@ -27,6 +28,8 @@ export class Institucion {
     @Column()
     latitud: string;
 
+    @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
+    prototipos: PrototipoPorInstitucion[];
     /**
      * Getter $id
      * @return {number}

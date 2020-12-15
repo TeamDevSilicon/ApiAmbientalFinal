@@ -26,7 +26,7 @@ export class CrearDatos {
         for (let index = 1; index < 6; index++) {
             let datoAmbiental = new DatoAmbiental();
             datoAmbiental.$ubicacion = "32123123123- 123321312"
-            datoAmbiental.$valor = index + 100 + index;
+            datoAmbiental.valor = index + 100 + index;
             datoAmbiental.$institucion = await this.institucionRepositorio.findOne(1);
             datoAmbiental.prototipo = await this.prototipoRepositorio.findOne(1);
             datoAmbiental.$sensor = await this.sensorRepositorio.findOne(1);

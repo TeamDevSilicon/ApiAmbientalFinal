@@ -9,7 +9,7 @@ export class InstitucionControlador {
 
     @Get("/institucion")
     getAll() {
-        return this.institucionRepositorio.find({ /* relations: ['datosAmbientales']  */ });
+        return this.institucionRepositorio.find({ relations: ['prototipos'] });
     }
 
     @Get("/institucion/:id")

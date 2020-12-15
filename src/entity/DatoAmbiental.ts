@@ -13,13 +13,13 @@ export class DatoAmbiental {
     id: number;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    private fecha: Date;
+    fecha: Date;
     /* { default: DateUtils.mixedDateToDateString(new Date()) } */
     @Column()
     fechaCreacion: String;
 
     @Column()
-    private valor: number;
+    valor: number;
 
     @Column()
     private ubicacion: string;
@@ -62,21 +62,21 @@ export class DatoAmbiental {
         this.id = value;
     }
 
-    /**
-     * Getter $fecha
-     * @return {Date}
-     */
-    public get $fecha(): Date {
-        return this.fecha;
-    }
+    // /**
+    //  * Getter $fecha
+    //  * @return {Date}
+    //  */
+    // public get $fecha(): Date {
+    //     return this.fecha;
+    // }
 
-    /**
-     * Getter $valor
-     * @return {number}
-     */
-    public get $valor(): number {
-        return this.valor;
-    }
+    // /**
+    //  * Getter $valor
+    //  * @return {number}
+    //  */
+    // public get $valor(): number {
+    //     return this.valor;
+    // }
 
     /**
      * Getter $ubicacion
@@ -86,21 +86,21 @@ export class DatoAmbiental {
         return this.ubicacion;
     }
 
-    /**
-     * Setter $fecha
-     * @param {Date} value
-     */
-    public set $fecha(value: Date) {
-        this.fecha = value;
-    }
+    // /**
+    //  * Setter $fecha
+    //  * @param {Date} value
+    //  */
+    // public set $fecha(value: Date) {
+    //     this.fecha = value;
+    // }
 
-    /**
-     * Setter $valor
-     * @param {number} value
-     */
-    public set $valor(value: number) {
-        this.valor = value;
-    }
+    // /**
+    //  * Setter $valor
+    //  * @param {number} value
+    //  */
+    // public set $valor(value: number) {
+    //     this.valor = value;
+    // }
 
     /**
      * Setter $ubicacion
