@@ -28,8 +28,8 @@ export class Institucion {
     @Column()
     latitud: string;
 
-    @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
-    prototipos: PrototipoPorInstitucion[];
+    // @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
+    // prototipos: PrototipoPorInstitucion[];
     /**
      * Getter $id
      * @return {number}

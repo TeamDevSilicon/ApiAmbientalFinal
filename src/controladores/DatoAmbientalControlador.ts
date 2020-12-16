@@ -185,7 +185,7 @@ export class DatoAmbientalControlador {
         return inst;
     }
 
-    //Devuelve ultimos datos ambientales por prototipo
+    //Devuelve ultimos datos ambientales por prototipo y una fecha
     @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorUnaFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
