@@ -5,6 +5,9 @@ import { Dato } from "./Dato";
 export class InstitucionDato {
 
     fecha: Date;
-    datosAmbientales: Dato[];
+    datosAmbientales: Dato;
+
+    //fecha: Date;
+
 
 }

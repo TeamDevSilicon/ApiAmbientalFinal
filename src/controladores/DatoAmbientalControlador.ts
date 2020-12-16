@@ -154,7 +154,7 @@ export class DatoAmbientalControlador {
 
         retorno.forEach(value => {
             if (value.tipoDato.id == 1) {
-                fecha = value.fecha/* DateUtils.mixedDateToDateString(value.fecha) */;
+                inst.fecha = value.fecha/* DateUtils.mixedDateToDateString(value.fecha) */;
                 datoObject.temperaturaAmbiente = value.valor;
             }
             if (value.tipoDato.id == 2) {
@@ -179,8 +179,9 @@ export class DatoAmbientalControlador {
 
         lista.push(datoObject);
         console.log(lista.length)
-        inst.fecha = fecha;
-        inst.datosAmbientales = lista;
+        //inst.fecha = fecha;
+        //inst.datosAmbientales = lista;
+        inst.datosAmbientales = datoObject;
 
         return inst;
     }
@@ -192,8 +193,8 @@ export class DatoAmbientalControlador {
         console.log('Id ' + id.toString.length)
         //let retorno: Array<DatoAmbiental[]> = [];
         let retorno: Array<DatoAmbiental> = [];
-        let fechaDesde = new Date(fecha + " 00:00:00");
-        let fechaHasta = new Date(fecha + " 23:59:00");
+        let fechaDesde = fecha + " 00:00:00";
+        let fechaHasta = fecha + " 23:59:00";
         for (let index = 1; index < 8; index++) {
             //let dato: DatoAmbiental[] = [];
             let dato: DatoAmbiental = new DatoAmbiental();
@@ -221,7 +222,7 @@ export class DatoAmbientalControlador {
 
         retorno.forEach(value => {
             if (value.tipoDato.id == 1) {
-                fechaInstitucion = value.fecha/* DateUtils.mixedDateToDateString(value.fecha) */;
+                inst.fecha = value.fecha/* DateUtils.mixedDateToDateString(value.fecha) */;
                 datoObject.temperaturaAmbiente = value.valor;
             }
             if (value.tipoDato.id == 2) {
@@ -246,8 +247,9 @@ export class DatoAmbientalControlador {
 
         lista.push(datoObject);
         console.log(lista.length);
-        inst.fecha = fechaInstitucion;
-        inst.datosAmbientales = lista;
+        //inst.fecha = fechaInstitucion;
+        //inst.datosAmbientales = lista;
+        inst.datosAmbientales = datoObject;
 
         return inst;
     }
@@ -272,22 +274,23 @@ export class DatoAmbientalControlador {
 
     @Get("/datoAmbientalPrototipo/:prototipoId/:fechaDesde/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
-    async devolverDatosPorPrototipoYFechaOrdenados2(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: String, @Param("fechaHasta") fechaHasta: String) {
+    async devolverDatosPorPrototipoYFechaOrdenados(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: String, @Param("fechaHasta") fechaHasta: String) {
         console.log('Id ' + id.toString.length)
         let prototipo = await getRepository(Prototipo).findOne(id);
         if (!prototipo) {
             return "No existe un prototipo con id " + id;
         }
         console.log("Proto ", prototipo);
-        let fechaHastaForm = new Date(fechaHasta + " 15:10:00");
+        let fechaHastaForm = fechaHasta + " 23:59:00";
         let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
             .select("fecha", "fecha")
             .distinct(true)
             .where("datoAmbiental.prototipo = :id", { id: id })
             //.andWhere("datoAmbiental.fecha between :fechaDesde and :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
             .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHastaForm })
+            .take(15)
             .getRawMany();
-
+        console.log(dato);
 
         let retorno2 = new PrototipoInstitucion();
         retorno2.id = prototipo.id;
@@ -295,9 +298,11 @@ export class DatoAmbientalControlador {
         retorno2.datosPorFecha = [];
 
         for (let file of dato) {
+
             let inst = new InstitucionDato();
             let lista: Array<Dato> = [];
             let datoObject = new Dato();
+            inst.fecha = file.fecha;
             for (let index = 1; index < 8; index++) {
                 let dato2 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
                     .select("fecha")
@@ -339,13 +344,90 @@ export class DatoAmbientalControlador {
                 }
             }
             lista.push(datoObject);
-            inst.fecha = file.fecha;
-            inst.datosAmbientales = lista;
+            //inst.fecha = file.fecha;
+            inst.datosAmbientales = datoObject;
             retorno2.datosPorFecha.push(inst);
         }
 
         return retorno2;
 
+    }
+
+
+
+    //Devuelve ultimos datos ambientales por prototipo
+    @Get("/datoAmbientalPrototipo2/:prototipoId")
+    // @OnUndefined(institucionNotFoundError)
+    async devolverDatosPorPrototipo2(@Param("prototipoId") id: number) {
+        console.log('Id ' + id.toString.length)
+        //let retorno: Array<DatoAmbiental[]> = [];
+        let fechaDesde = DateUtils.mixedDateToDateString(new Date()) + " 00:00:00";
+        let fechaHasta = DateUtils.mixedDateToDateString(new Date()) + " 23:59:00";
+        let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+            .select("fecha")
+            .distinct(true)
+            .where("datoAmbiental.prototipo = :id", { id: id })
+            //.andWhere("datoAmbiental.fecha between :fechaDesde and :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
+            .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
+            .orderBy("datoAmbiental.id", "DESC")
+            .getRawMany();
+        let retorno: Array<DatoAmbiental> = [];
+        for (let index = 1; index < 8; index++) {
+            //let dato: DatoAmbiental[] = [];
+            let dato: DatoAmbiental = new DatoAmbiental();
+            dato = await this.datoRepositorio.findOne({
+                relations: ['tipoDato',], order: { id: "DESC" },
+                where: {
+                    tipoDato: index,
+                    prototipo: id
+                }/* ,
+                skip: 0,
+                take: 1 */
+            });
+            if (dato != null) {
+                retorno.push(dato);
+            }
+
+        }
+        console.log(retorno);
+
+        let inst = new InstitucionDato();
+        let lista: Array<Dato> = [];
+        let datoObject = new Dato();
+        let fecha;
+
+        retorno.forEach(value => {
+            if (value.tipoDato.id == 1) {
+                inst.fecha = value.fecha/* DateUtils.mixedDateToDateString(value.fecha) */;
+                datoObject.temperaturaAmbiente = value.valor;
+            }
+            if (value.tipoDato.id == 2) {
+                datoObject.humedadAmbiente = value.valor;
+            }
+            if (value.tipoDato.id == 3) {
+                datoObject.humedadSuelo = value.valor;
+            }
+            if (value.tipoDato.id == 4) {
+                datoObject.luz = value.valor;
+            }
+            if (value.tipoDato.id == 5) {
+                datoObject.lluvia = value.valor;
+            }
+            if (value.tipoDato.id == 6) {
+                datoObject.viento = value.valor;
+            }
+            if (value.tipoDato.id == 7) {
+                datoObject.precipitaciones = value.valor;
+            }
+        });
+
+        lista.push(datoObject);
+        console.log(lista.length)
+        //inst.fecha = fecha;
+        //inst.datosAmbientales = lista;
+        inst.datosAmbientales = datoObject;
+
+        return inst;
     }
 
 }
