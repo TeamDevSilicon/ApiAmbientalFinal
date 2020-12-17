@@ -9,7 +9,7 @@ export class InstitucionControlador {
 
     @Get("/institucion")
     getAll() {
-        return this.institucionRepositorio.find(/* { relations: ['prototipos'] } */);
+        return this.institucionRepositorio.find({ relations: ['departamento', 'localidad'] });
     }
 
     @Get("/institucion/:id")
@@ -27,8 +27,9 @@ export class InstitucionControlador {
     }
 
     @Put("/institucion/:id")
-    put(@Param("id") id: number, @Body() institucion: any) {
-        return "Updating a institucion...";
+    put(@Param("id") id: number, @Body() institucion: Institucion) {
+        console.log(institucion);
+        return this.institucionRepositorio.update(id, institucion);
     }
 
     @Delete("/institucion/:id")

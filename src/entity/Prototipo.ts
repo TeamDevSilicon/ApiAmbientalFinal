@@ -14,6 +14,12 @@ export class Prototipo {
     @Column()
     nombre: string;
 
+    @Column()
+    longitud: string;
+
+    @Column()
+    latitud: string;
+
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.prototipo)
     datosAmbientales: DatoAmbiental[];
 

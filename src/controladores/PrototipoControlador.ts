@@ -10,17 +10,17 @@ export class PrototipoControlador {
 
     @Get("/prototipo")
     getAll() {
-        return this.prototipoRepositorio.find({ relations: ['datosAmbientales'] });
+        return this.prototipoRepositorio.find({ /* relations: ['datosAmbientales'] */ });
     }
 
     @Get("/prototipo/:id")
     // @OnUndefined(UserNotFoundError)
     getOne(@Param("id") id: number) {
         console.log('Id ' + id.toString.length)
-        return this.prototipoRepositorio.findOne(id, {
+        return this.prototipoRepositorio.findOne(id/* , {
             relations: ['datosAmbientales', 'datosAmbientales.tipoDato']
 
-        });
+        } */);
     }
 
     @Post("/prototipo")
