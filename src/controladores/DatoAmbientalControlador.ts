@@ -566,7 +566,6 @@ export class DatoAmbientalControlador {
         retorno2.datosPorFecha.push(inst);
     }
 
-
 }
 
 
