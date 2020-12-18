@@ -25,7 +25,7 @@ export class InstitucionControlador {
             .addSelect("localidad.nombre", "localidad")
             .innerJoin("institucion.departamento", "departamento")
             .innerJoin("institucion.localidad", "localidad")
-            .getMany()
+            .getRawMany()
 
         return dato;
     }
