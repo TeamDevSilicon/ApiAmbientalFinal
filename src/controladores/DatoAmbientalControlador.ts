@@ -267,8 +267,15 @@ export class DatoAmbientalControlador {
         let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
             .select("prototipo.id", "id")
             .addSelect("prototipo.nombre", "nombre")
+            .addSelect("prototipo.latitud", "latitud")
+            .addSelect("prototipo.longitud", "longitud")
+            .addSelect("departamento.nombre", "departamento")
+            .addSelect("localidad.nombre", "localidad")
             .distinct(true)
             .innerJoin("datoAmbiental.prototipo", "prototipo")
+            .innerJoin("datoAmbiental.institucion", "institucion")
+            .innerJoin("institucion.departamento", "departamento")
+            .innerJoin("institucion.localidad", "localidad")
             .where("datoAmbiental.institucion = :id", { id: id })
             .getRawMany();
         console.log(dato);

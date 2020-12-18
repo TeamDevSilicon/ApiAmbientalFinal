@@ -4,7 +4,7 @@
    "port": 3306,
    "username": "root",
    "password": "root",
-   "database": "ambienteUltima",
+   "database": "ambiente2",
    "synchronize": false,
    "logging": false,
    "entities": [
