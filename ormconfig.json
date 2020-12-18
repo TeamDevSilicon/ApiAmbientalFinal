@@ -2,11 +2,11 @@
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
-   "username": "root",
-   "password": "root",
+   "username": "silicon",
+   "password": "S1l1c0n.2020",
    "database": "ambiente2",
    "synchronize": false,
-   "logging": true,
+   "logging": false,
    "entities": [
       "src/entity/**/*.ts"
    ],

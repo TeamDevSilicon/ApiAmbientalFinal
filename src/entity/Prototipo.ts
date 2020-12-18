@@ -4,6 +4,12 @@ import { DatoAmbiental } from "./DatoAmbiental";
 @Entity()
 export class Prototipo {
 
+    @Column()
+    longitud: string;
+
+    @Column()
+    latitud: string;
+
     public constructor(nombre: string) {
         this.nombre = nombre;
     }
