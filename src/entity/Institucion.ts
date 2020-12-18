@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { DatoAmbiental } from "./DatoAmbiental";
+import { Departamento } from "./Departamento";
+import { Localidad } from "./Localidad";
 import { PrototipoPorInstitucion } from "./PrototipoPorInstitucion";
 
 
@@ -28,8 +30,16 @@ export class Institucion {
     @Column()
     latitud: string;
 
-    @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
-    prototipos: PrototipoPorInstitucion[];
+    @ManyToOne(type => Departamento, departamento => departamento.id, { cascade: true })
+    @JoinColumn({ name: "Id_Departamento" })
+    departamento: Departamento;
+
+    @ManyToOne(type => Localidad, localidad => localidad.instituciones, { cascade: true })
+    @JoinColumn({ name: "Id_Localidad" })
+    localidad: Localidad;
+
+    // @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
+    // prototipos: PrototipoPorInstitucion[];
     /**
      * Getter $id
      * @return {number}

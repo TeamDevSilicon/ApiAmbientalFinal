@@ -4,10 +4,9 @@ export class PrototipoInstitucion {
 
     id: number;
     nombre: string;
-    lat: number;
-    long: number;
+    lat: string;
+    long: string;
 
     datosPorFecha: InstitucionDato[];
-
 
 }

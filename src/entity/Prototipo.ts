@@ -4,12 +4,6 @@ import { DatoAmbiental } from "./DatoAmbiental";
 @Entity()
 export class Prototipo {
 
-    @Column()
-    longitud: string;
-
-    @Column()
-    latitud: string;
-
     public constructor(nombre: string) {
         this.nombre = nombre;
     }
@@ -19,6 +13,12 @@ export class Prototipo {
 
     @Column()
     nombre: string;
+
+    @Column()
+    longitud: string;
+
+    @Column()
+    latitud: string;
 
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.prototipo)
     datosAmbientales: DatoAmbiental[];
