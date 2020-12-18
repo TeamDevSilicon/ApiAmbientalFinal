@@ -385,8 +385,9 @@ export class DatoAmbientalControlador {
             .andWhere("datoAmbiental.tipoDato is not null")
             //.andWhere("datoAmbiental.fecha between :fechaDesde and :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
             .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
-            .take(15)
+            //.take(15)
             .getRawMany();
+
         console.log(dato);
 
         let retorno2 = new PrototipoInstitucion();
