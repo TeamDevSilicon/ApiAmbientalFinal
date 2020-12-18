@@ -12,6 +12,24 @@ export class InstitucionControlador {
         return this.institucionRepositorio.find({ relations: ['departamento', 'localidad'] });
     }
 
+    @Get("/institucionTemporal")
+    async getAll2() {
+
+        let dato = await this.institucionRepositorio.createQueryBuilder("institucion")
+            .select("institucion.id", "id")
+            .addSelect("institucion.nombre", "nombre")
+            .addSelect("latitud")
+            .addSelect("longitud")
+            .addSelect("cue")
+            .addSelect("departamento.nombre", "departamento")
+            .addSelect("localidad.nombre", "localidad")
+            .innerJoin("institucion.departamento", "departamento")
+            .innerJoin("institucion.localidad", "localidad")
+            .getRawMany()
+
+        return dato;
+    }
+
     @Get("/institucion/:id")
     // @OnUndefined(institucionNotFoundError)
     getOne(@Param("id") id: number) {
