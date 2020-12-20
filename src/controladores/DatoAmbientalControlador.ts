@@ -366,7 +366,7 @@ export class DatoAmbientalControlador {
     }
 
     //Devuelve ultimos datos ambientales por prototipo y una fecha
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    @Get("/datoAmbientalPrototipo10/:prototipoId/:fecha")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorUnaFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
         console.log('Id ' + id.toString.length)
@@ -448,6 +448,161 @@ export class DatoAmbientalControlador {
             inst.datosAmbientales = datoObject;
             retorno2.datosPorFecha.push(inst);
         }
+
+        return retorno2;
+
+    }
+
+    //Devuelve ultimos datos ambientales por prototipo y una fecha
+    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    // @OnUndefined(institucionNotFoundError)
+    async devolverDatosPorPrototipoPorUnaFecha3(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
+        console.log('Id ' + id.toString.length)
+        let prototipo = await getRepository(Prototipo).findOne(id);
+        if (!prototipo) {
+            return "No existe un prototipo con id " + id;
+        }
+        console.log("Proto ", prototipo);
+        let fechaDesde = DateUtils.mixedDateToDateString(fecha + " 00:00:00");
+        let fechaHasta = DateUtils.mixedDateToDateString(fecha + " 23:59:00");
+        //let fechaHastaForm = fechaHasta + " 23:59:00";
+        let datos = [];
+        for (let index = 1; index < 9; index++) {
+            let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+                .select("fecha", "fecha")
+                .distinct(true)
+                .where("datoAmbiental.prototipo = :id", { id: id })
+                .andWhere("datoAmbiental.tipoDato is not null")
+                .andWhere("datoAmbiental.tipoDato = :idTipoDato", { idTipoDato: index })
+                //.andWhere("datoAmbiental.fecha between :fechaDesde and :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
+                .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
+                .take(5)
+                .getRawMany();
+            datos.push(dato)
+
+        }
+
+
+        console.log(datos);
+        let retorno2 = new PrototipoInstitucion();
+        retorno2.id = prototipo.id;
+        retorno2.nombre = prototipo.nombre;
+        retorno2.lat = prototipo.latitud;
+        retorno2.long = prototipo.longitud;
+
+        retorno2.datosPorFecha = [];
+        for (let dato of datos) {
+            for (let datoFecha of dato) {
+                //console.log(dato2.fecha)
+                let inst = new InstitucionDato();
+                let lista: Array<Dato> = [];
+                let datoObject = new Dato();
+                inst.fecha = datoFecha.fecha;
+                for (let index = 1; index < 9; index++) {
+                    let dato2 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+                        .select("fecha")
+                        .addSelect("tipoDatoId", "idDato")
+                        .addSelect("valor")
+                        .innerJoin("datoAmbiental.prototipo", "prototipo")
+                        .where("datoAmbiental.prototipo = :id", { id: id })
+                        .andWhere("datoAmbiental.fecha = :fecha", { fecha: datoFecha.fecha })
+                        .andWhere("datoAmbiental.tipoDatoId = :idTipoDato", { idTipoDato: index })
+                        .groupBy("fecha,idDato,valor")
+                        .orderBy("fecha", "ASC")
+                        .getRawMany();
+                    for (let dato of dato2) {
+                        console.log(dato);
+                        if (index == 1) {
+                            datoObject.temperaturaAmbiente = dato.valor;
+                        }
+                        if (index == 2) {
+                            datoObject.humedadAmbiente = dato.valor;
+                        }
+                        if (index == 3) {
+                            datoObject.humedadSuelo = dato.valor;
+                        }
+                        if (index == 4) {
+                            datoObject.luz = dato.valor;
+                        }
+                        if (index == 5) {
+                            datoObject.lluvia = dato.valor;
+                        }
+                        if (index == 6) {
+                            datoObject.viento = dato.valor;
+                        }
+                        if (index == 7) {
+                            datoObject.precipitaciones = dato.valor;
+                        }
+                        if (index == 8) {
+                            datoObject.direccionViento = dato.valor;
+                        }
+                    }
+                }
+                lista.push(datoObject);
+                //inst.fecha = file.fecha;
+                inst.datosAmbientales = datoObject;
+                retorno2.datosPorFecha.push(inst);
+            }
+        }
+        // let retorno2 = new PrototipoInstitucion();
+        // retorno2.id = prototipo.id;
+        // retorno2.nombre = prototipo.nombre;
+        // retorno2.lat = prototipo.latitud;
+        // retorno2.long = prototipo.longitud;
+
+        // retorno2.datosPorFecha = [];
+
+
+        // for (let file of datos) {
+        //     let inst = new InstitucionDato();
+        //     let lista: Array<Dato> = [];
+        //     let datoObject = new Dato();
+        //     inst.fecha = file.fecha;
+        //     for (let index = 1; index < 9; index++) {
+        //         let dato2 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
+        //             .select("fecha")
+        //             .addSelect("tipoDatoId", "idDato")
+        //             .addSelect("valor")
+        //             .innerJoin("datoAmbiental.prototipo", "prototipo")
+        //             .where("datoAmbiental.prototipo = :id", { id: id })
+        //             .andWhere("datoAmbiental.fecha = :fecha", { fecha: file.fecha })
+        //             .andWhere("datoAmbiental.tipoDatoId = :idTipoDato", { idTipoDato: index })
+        //             .groupBy("fecha,idDato,valor")
+        //             .orderBy("fecha", "ASC")
+        //             .getRawMany();
+        //         for (let dato of dato2) {
+        //             console.log(dato);
+        //             if (index == 1) {
+        //                 datoObject.temperaturaAmbiente = dato.valor;
+        //             }
+        //             if (index == 2) {
+        //                 datoObject.humedadAmbiente = dato.valor;
+        //             }
+        //             if (index == 3) {
+        //                 datoObject.humedadSuelo = dato.valor;
+        //             }
+        //             if (index == 4) {
+        //                 datoObject.luz = dato.valor;
+        //             }
+        //             if (index == 5) {
+        //                 datoObject.lluvia = dato.valor;
+        //             }
+        //             if (index == 6) {
+        //                 datoObject.viento = dato.valor;
+        //             }
+        //             if (index == 7) {
+        //                 datoObject.precipitaciones = dato.valor;
+        //             }
+        //             if (index == 8) {
+        //                 datoObject.direccionViento = dato.valor;
+        //             }
+        //         }
+        //     }
+        //     lista.push(datoObject);
+        //     //inst.fecha = file.fecha;
+        //     inst.datosAmbientales = datoObject;
+        //     retorno2.datosPorFecha.push(inst);
+        // }
 
         return retorno2;
 
