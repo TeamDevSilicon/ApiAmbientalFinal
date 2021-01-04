@@ -283,16 +283,21 @@ export class DatoAmbientalControlador {
     }
 
 
-    @Get("/datoAmbientalPrototipo10/:prototipoId/:fechaDesde/:fechaHasta")
+    @Get("/datoAmbientalPrototipo/:prototipoId/:fechaDesde/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoYFechaOrdenados(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: String, @Param("fechaHasta") fechaHasta: String) {
-        console.log('Id ' + id.toString.length)
+        //console.log('Id ' + id.toString.length)
+
+        //Recupero y controlo el prototipo por id
         let prototipo = await getRepository(Prototipo).findOne(id);
         if (!prototipo) {
             return "No existe un prototipo con id " + id;
         }
-        console.log("Proto ", prototipo);
+        //console.log("Proto ", prototipo);
+        //Seteo la hora minuto y segundo de fechaHasta
         let fechaHastaForm = fechaHasta + " 23:59:00";
+
+        //Recupero las fechas
         let dato = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
             .select("fecha", "fecha")
             .distinct(true)
@@ -300,22 +305,26 @@ export class DatoAmbientalControlador {
             .andWhere("datoAmbiental.tipoDato is not null")
             //.andWhere("datoAmbiental.fecha between :fechaDesde and :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
             .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHastaForm })
-            //.take(15)
+            //.take(30)
             .getRawMany();
-        console.log(dato);
+        //console.log(dato);
 
-        let retorno2 = new PrototipoInstitucion();
-        retorno2.id = prototipo.id;
-        retorno2.nombre = prototipo.nombre;
-        retorno2.datosPorFecha = [];
+        //Clase personalizada para setear JSON incorrecto
+        let prototipoInstitucion = new PrototipoInstitucion();
+        prototipoInstitucion.id = prototipo.id;
+        prototipoInstitucion.nombre = prototipo.nombre;
+        prototipoInstitucion.datosPorFecha = [];
 
+        //Recorro las fechas
         for (let file of dato) {
-
+            //Clase personalizada para setear JSON incorrecto
             let inst = new InstitucionDato();
             let lista: Array<Dato> = [];
             let datoObject = new Dato();
             inst.fecha = file.fecha;
-            for (let index = 1; index < 8; index++) {
+
+            //Obtengo el dato por fecha, id prototipo e idTipo de dato
+            for (let index = 1; index < 9; index++) {
                 let dato2 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
                     .select("fecha")
                     .addSelect("tipoDatoId", "idDato")
@@ -329,44 +338,52 @@ export class DatoAmbientalControlador {
                     .andWhere("datoAmbiental.tipoDatoId = :idTipoDato", { idTipoDato: index })
                     .groupBy("fecha,idDato,valor")
                     .orderBy("fecha", "ASC")
-                    .getRawMany();
-                for (let dato of dato2) {
-                    console.log(dato);
+                    //.take(5)
+                    .getRawOne();
+
+                console.log(dato2)
+                //Si hay datos
+                //Seteo el valor por tipo de dato
+                if (dato2) {
+                    console.log(dato2['valor']);
                     if (index == 1) {
-                        datoObject.temperaturaAmbiente = dato.valor;
+                        datoObject.temperaturaAmbiente = dato2['valor'];
                     }
                     if (index == 2) {
-                        datoObject.humedadAmbiente = dato.valor;
+                        datoObject.humedadAmbiente = dato2['valor'];
                     }
                     if (index == 3) {
-                        datoObject.humedadSuelo = dato.valor;
+                        datoObject.humedadSuelo = dato2['valor'];
                     }
                     if (index == 4) {
-                        datoObject.luz = dato.valor;
+                        datoObject.luz = dato2['valor'];
                     }
                     if (index == 5) {
-                        datoObject.lluvia = dato.valor;
+                        datoObject.lluvia = dato2['valor'];
                     }
                     if (index == 6) {
-                        datoObject.viento = dato.valor;
+                        datoObject.viento = dato2['valor'];
                     }
                     if (index == 7) {
-                        datoObject.precipitaciones = dato.valor;
+                        datoObject.precipitaciones = dato2['valor'];
+                    }
+                    if (index == 8) {
+                        datoObject.direccionViento = dato2['valor'];
                     }
                 }
             }
             lista.push(datoObject);
             //inst.fecha = file.fecha;
             inst.datosAmbientales = datoObject;
-            retorno2.datosPorFecha.push(inst);
+            prototipoInstitucion.datosPorFecha.push(inst);
         }
 
-        return retorno2;
+        return prototipoInstitucion;
 
     }
 
     //Devuelve ultimos datos ambientales por prototipo y una fecha
-    @Get("/datoAmbientalPrototipo10/:prototipoId/:fecha")
+    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorUnaFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
         //console.log('Id ' + id.toString.length)
@@ -410,8 +427,8 @@ export class DatoAmbientalControlador {
             let lista: Array<Dato> = [];
             let datoObject = new Dato();
             inst.fecha = file.fecha;
-            //Obtengo los datos por tipo de dato, fecha e id prototipo
 
+            //Obtengo los datos por tipo de dato, fecha e id prototipo
             for (let index = 1; index < 9; index++) {
                 let dato2 = await this.datoRepositorio.createQueryBuilder("datoAmbiental")
                     .select("fecha")
@@ -423,36 +440,37 @@ export class DatoAmbientalControlador {
                     .andWhere("datoAmbiental.tipoDatoId = :idTipoDato", { idTipoDato: index })
                     .groupBy("fecha,idDato,valor")
                     .orderBy("fecha", "ASC")
-                    .getRawMany();
+                    .getRawOne();
                 //console.log(dato2);
                 //Seteo los tipos de datos con sus valores
-                for (let dato of dato2) {
-                    //console.log(dato);
-                    if (dato.idDato == 1) {
-                        datoObject.temperaturaAmbiente = dato.valor;
+                if (dato2) {
+                    console.log(dato2['valor']);
+                    if (index == 1) {
+                        datoObject.temperaturaAmbiente = dato2['valor'];
                     }
-                    if (dato.idDato == 2) {
-                        datoObject.humedadAmbiente = dato.valor;
+                    if (index == 2) {
+                        datoObject.humedadAmbiente = dato2['valor'];
                     }
-                    if (dato.idDato == 3) {
-                        datoObject.humedadSuelo = dato.valor;
+                    if (index == 3) {
+                        datoObject.humedadSuelo = dato2['valor'];
                     }
-                    if (dato.idDato == 4) {
-                        datoObject.luz = dato.valor;
+                    if (index == 4) {
+                        datoObject.luz = dato2['valor'];
                     }
-                    if (dato.idDato == 5) {
-                        datoObject.lluvia = dato.valor;
+                    if (index == 5) {
+                        datoObject.lluvia = dato2['valor'];
                     }
-                    if (dato.idDato == 6) {
-                        datoObject.viento = dato.valor;
+                    if (index == 6) {
+                        datoObject.viento = dato2['valor'];
                     }
-                    if (dato.idDato == 7) {
-                        datoObject.precipitaciones = dato.valor;
+                    if (index == 7) {
+                        datoObject.precipitaciones = dato2['valor'];
                     }
-                    if (dato.idDato == 8) {
-                        datoObject.direccionViento = dato.valor;
+                    if (index == 8) {
+                        datoObject.direccionViento = dato2['valor'];
                     }
                 }
+                //}
             }
             lista.push(datoObject);
             //inst.fecha = file.fecha;
@@ -465,7 +483,7 @@ export class DatoAmbientalControlador {
     }
 
     //Devuelve ultimos datos ambientales por prototipo y una fecha
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    @Get("/datoAmbientalPrototipo10/:prototipoId/:fecha")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorUnaFecha3(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
         console.log('Id ' + id.toString.length)
@@ -620,7 +638,7 @@ export class DatoAmbientalControlador {
     }
 
     //Devuelve ultimos datos ambientales por prototipo y una fecha
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha/:fechaHasta")
+    @Get("/datoAmbientalPrototipo10/:prototipoId/:fecha/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorDosFechas(@Param("prototipoId") id: number, @Param("fecha") fecha: String, @Param("fechaHasta") fechaH: String) {
         console.log('Id ' + id.toString.length)
