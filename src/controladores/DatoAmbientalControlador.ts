@@ -410,7 +410,7 @@ export class DatoAmbientalControlador {
             .take(30)
             .getRawMany();
 
-        //console.log(dato);
+        console.log(dato);
 
         //Clase personalizada para setear JSON incorrecto
         let prototipoInstitucion = new PrototipoInstitucion();
@@ -419,6 +419,27 @@ export class DatoAmbientalControlador {
         prototipoInstitucion.lat = prototipo.latitud;
         prototipoInstitucion.long = prototipo.longitud;
         prototipoInstitucion.datosPorFecha = [];
+
+        //Devuelve todo 0 si no existen datos en la fecha
+        if (dato.length == 0) {
+            let inst = new InstitucionDato();
+            let lista: Array<Dato> = [];
+            let datoObject = new Dato();
+            datoObject.temperaturaAmbiente = 0;
+            datoObject.humedadAmbiente = 0;
+            datoObject.humedadSuelo = 0;
+            datoObject.lluvia = 0;
+            datoObject.luz = 0;
+            datoObject.precipitaciones = 0;
+            datoObject.direccionViento = 0;
+            datoObject.viento = 0;
+
+            inst.fecha = DateUtils.mixedDateToDateString(fecha);
+
+            lista.push(datoObject);
+            inst.datosAmbientales = datoObject;
+            prototipoInstitucion.datosPorFecha.push(inst);
+        }
 
         //Recorro las fechas
         for (let file of dato) {
