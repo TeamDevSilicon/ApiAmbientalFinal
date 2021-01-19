@@ -408,6 +408,7 @@ export class DatoAmbientalControlador {
             .andWhere("datoAmbiental.tipoDato is not null")
             .andWhere("datoAmbiental.fecha >= :fechaDesde and  datoAmbiental.fecha <= :fechaHasta", { fechaDesde: fechaDesde, fechaHasta: fechaHasta })
             .take(30)
+            .orderBy("fecha", "DESC")
             .getRawMany();
 
         console.log(dato);
