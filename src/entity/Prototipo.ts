@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { DatoAmbiental } from "./DatoAmbiental";
-import { DatoPorFechaVista } from "./DatoPorFechaVista";
+// import { DatoPorFechaVista } from "./DatoPorFechaVista";
 import { Institucion } from "./Institucion";
 
 @Entity()
