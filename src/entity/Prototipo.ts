@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { DatoAmbiental } from "./DatoAmbiental";
-// import { DatoPorFechaVista } from "./DatoPorFechaVista";
+import { DatoPorFechaVista } from "./DatoPorFechaVista";
 import { Institucion } from "./Institucion";
 
 @Entity()
@@ -25,8 +25,8 @@ export class Prototipo {
     @OneToMany(type => DatoAmbiental, datoAmbiental => datoAmbiental.prototipo)
     datosAmbientales: DatoAmbiental[];
 
-    // @OneToMany(type => DatoPorFechaVista, datosPorFecha => datosPorFecha.prototipo)
-    // datosPorFecha: DatoPorFechaVista[];
+    @OneToMany(type => DatoPorFechaVista, datosPorFecha => datosPorFecha.prototipo)
+    datosPorFecha: DatoPorFechaVista[];
 
     @ManyToOne(type => Institucion /* => departamento.id, { cascade: true } */)
     @JoinColumn({ name: "institucionId" })

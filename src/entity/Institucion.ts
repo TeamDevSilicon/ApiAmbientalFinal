@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColum
 import { DatoAmbiental } from "./DatoAmbiental";
 import { Departamento } from "./Departamento";
 import { Localidad } from "./Localidad";
-import { PrototipoPorInstitucion } from "./PrototipoPorInstitucion";
+import { Prototipo } from "./Prototipo";
 
 
 @Entity()
@@ -38,8 +38,8 @@ export class Institucion {
     @JoinColumn({ name: "Id_Localidad" })
     localidad: Localidad;
 
-    // @OneToMany(type => PrototipoPorInstitucion, prototipoPorInstitucion => prototipoPorInstitucion.idInstitucion)
-    // prototipos: PrototipoPorInstitucion[];
+    @OneToMany(type => Prototipo, prototipo => prototipo.institucion)
+    prototipos: Prototipo[];
     /**
      * Getter $id
      * @return {number}

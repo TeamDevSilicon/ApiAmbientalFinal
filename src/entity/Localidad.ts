@@ -18,7 +18,6 @@ export class Localidad {
     @JoinColumn({ name: "Id_Departamento" })
     departamento: Departamento;
 
-
     @OneToMany(type => Institucion, institucion => institucion.localidad)
     instituciones: Institucion[];
 }

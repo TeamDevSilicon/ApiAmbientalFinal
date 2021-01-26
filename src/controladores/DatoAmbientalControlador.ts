@@ -122,7 +122,7 @@ export class DatoAmbientalControlador {
     }
 
     //Devuelve ultimos datos ambientales por prototipo
-    @Get("/datoAmbientalPrototipo/:prototipoId")
+    @Get("/datoAmbientalPrototipo5432/:prototipoId")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipo(@Param("prototipoId") id: number) {
         console.log('Id ' + id.toString.length)
@@ -259,7 +259,7 @@ export class DatoAmbientalControlador {
     // }
 
     //Devuelve los prototipos de una institucion
-    @Get("/datoAmbientalPrototiposPorInstitucion/:institucionId")
+    @Get("/datoAmbientalPrototiposPorInstitucion5432/:institucionId")
     // @OnUndefined(institucionNotFoundError)
     async devolverPrototiposPorInstitucion(@Param("institucionId") id: number) {
         //console.log('Id ' + id.toString.length)
@@ -283,7 +283,7 @@ export class DatoAmbientalControlador {
     }
 
 
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fechaDesde/:fechaHasta")
+    @Get("/datoAmbientalPrototipo5432/:prototipoId/:fechaDesde/:fechaHasta")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoYFechaOrdenados(@Param("prototipoId") id: number, @Param("fechaDesde") fechaDesde: String, @Param("fechaHasta") fechaHasta: String) {
         //console.log('Id ' + id.toString.length)
@@ -383,7 +383,7 @@ export class DatoAmbientalControlador {
     }
 
     //Devuelve ultimos datos ambientales por prototipo y una fecha
-    @Get("/datoAmbientalPrototipo/:prototipoId/:fecha")
+    @Get("/datoAmbientalPrototipo5432/:prototipoId/:fecha")
     // @OnUndefined(institucionNotFoundError)
     async devolverDatosPorPrototipoPorUnaFecha(@Param("prototipoId") id: number, @Param("fecha") fecha: String) {
         //console.log('Id ' + id.toString.length)
