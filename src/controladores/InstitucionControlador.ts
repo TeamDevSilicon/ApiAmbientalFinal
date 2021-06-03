@@ -25,6 +25,7 @@ export class InstitucionControlador {
             .addSelect("localidad.nombre", "localidad")
             .innerJoin("institucion.departamento", "departamento")
             .innerJoin("institucion.localidad", "localidad")
+            .where("institucion.id IN (:instituciones)", { instituciones: [10, 16] })
             .getRawMany()
 
         return dato;

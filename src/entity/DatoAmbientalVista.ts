@@ -11,7 +11,7 @@ export class DatoAmbientalVista {
     })
     fecha: Date;
 
-    @Column("int", { name: "Temperatura ambiente" })
+    @Column({ name: "Temperatura ambiente" })
     temperaturaAmbiente: number;
 
     @Column({ name: "Humedad ambiente" })
